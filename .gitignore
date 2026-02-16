@@ -1,4 +1,5 @@
 #Prevents the DS Store file from appearing in the changes or being committed into git.
 .DS_Store
 
+#Prevents VScode folder from being staged
 /.vscode
