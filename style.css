@@ -57,13 +57,19 @@ button:hover{
 
 header{
   position: fixed;
+  width:100%;
+  z-index: 1;
+}
+
+.headerContent{
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
   background-color: #e4f5fa;
-  width:100%;
   padding: 0 10px;
+  border-radius: 5px;
+  margin: 5px;
 }
 
 header p{
