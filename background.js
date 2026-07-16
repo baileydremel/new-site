@@ -35,6 +35,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   frameRate(60);
   updateCircleSize();
+  pixelDensity(1);
 }
 
 function draw() {
@@ -122,11 +123,9 @@ function draw() {
 
   //This helps to optimise the site by removing the first item on the list,
   //which isn't usually visible after a certain point.
-  for(var j = 0; j < shapeConstructor.length; j++){
-    if(shapeConstructor.length >= 20 && j != 0){
-        shapeConstructor.shift();
-    }
-  }
+  while(shapeConstructor.length > 20){
+  shapeConstructor.shift();
+}
 
   push();
     fill('#e4f5fa');
