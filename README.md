@@ -8,8 +8,8 @@
 
 <p align="center">
     <picture align="center">
-        <source media="(prefers-color-scheme: dark)" srcset="./assets/logomarkdarkthemev2.png">
-        <img alt="baileydremel glasses logo with text below saying baileydremel" src="./assets/logomarklightthemev2.png" width="250px">
+        <source media="(prefers-color-scheme: dark)" srcset="./assets/logomarkdarktheme.png">
+        <img alt="baileydremel glasses logo with text below saying baileydremel" src="./assets/logomarklighttheme.png" width="250px">
     </picture>
 </p>
 
