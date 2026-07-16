@@ -1,20 +1,10 @@
 var shapeConstructor = [{ red: 96, green: 8, blue: 216, multi: 1, frameC: 0}];
 
-var speed = 100;
-
-//These are the set points for the main rhombus shape.
-var x1 = -87;
-var x2 = 87;
-var x3 = 58.5;
-var x4 = -58.5;
-var y1 = -58.875;
-var y2 = 58.975;
-
 //Variables that relate to the expansion of the background shapes.
 var expand, xFactor, yFactor;
 
 var frame;
-var multiply = 32;
+var multiply = 72;
 var scale;
 var responsive = 1;
 
@@ -30,10 +20,21 @@ var shapeBlue = 0;
 var startShapes = 0;
 var k = 0;
 
+var circleSize = 150; // fallback until CSS var is read
+
+function updateCircleSize(){
+  var probe = document.getElementById('circleSizeProbe');
+  var resolved = probe.getBoundingClientRect().width;
+  if(!isNaN(resolved) && resolved > 0){
+    circleSize = resolved;
+  }
+}
+
 //Basic setup function with the frame rate and setting the screen size.
 function setup() {
   createCanvas(windowWidth, windowHeight);
   frameRate(60);
+  updateCircleSize();
 }
 
 function draw() {
@@ -55,7 +56,7 @@ function draw() {
     yFactor = 1 + width/height;
   }
 
-  scale = width/(multiply*20);
+  scale = width/720
 
   if(scale <2){
     scale = 2;
@@ -115,15 +116,7 @@ function draw() {
     //Multiplied by the scale of the screen.
     expand = ((frameCount - shapeConstructor[i].frameC)*scale)*responsive;
 
-    //Building the shape based on the fixed co-ordinates plus or minus the expansion factor
-    beginShape();
-    
-      vertex((x1*responsive)-expand,(y1*responsive)-(expand/yFactor)); //top left corner
-      vertex((x2*responsive)+expand,(y1*responsive)-(expand/yFactor)); //top right corner
-      vertex((x3*responsive)+expand,(y2*responsive)+(expand/yFactor)); //bottom right corner
-      vertex((x4*responsive)-expand,(y2*responsive)+(expand/yFactor)); //bottom left corner
-
-    endShape(CLOSE);
+    circle(0,0,circleSize+expand);
 
   }
 
@@ -133,20 +126,11 @@ function draw() {
     if(shapeConstructor.length >= 20 && j != 0){
         shapeConstructor.shift();
     }
-  } 
+  }
 
-
-  //A solid rhombus
   push();
     fill('#e4f5fa');
-    beginShape();
-      vertex(x1*responsive,y1*responsive); //top left
-      vertex(x2*responsive,y1*responsive); //top right
-      vertex(x3*responsive,y2*responsive); //bottom right
-      vertex(x4*responsive,y2*responsive); //bottom left
-    endShape(CLOSE);
-  pop();
-
+    circle(0,0,circleSize);
 }
 
 //Creates the shape with the first colour set and taking the current frame of the site.
@@ -163,4 +147,5 @@ function createShape(f){
 //For when the window changes sizes.
 function windowResized(){
   resizeCanvas(windowWidth, windowHeight);
+  updateCircleSize();
 }

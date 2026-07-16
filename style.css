@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
   font-family: SpaceGrotesk;
   src: url(assets/SpaceGrotesk.ttf);
 } */
@@ -108,21 +108,29 @@ header p{
   left:50%;
   transform: translate(-50%, -50%);
 }
-
 .middle{
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.logoRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  column-gap: 2vw;
+  align-items: center;
+  width: 100%;
+}
+
 .leftContent{
-  transform: translateX(-50%);
+  text-align: right;
+  padding-right:30px;
 }
 
 .middleContent{
-  max-width: 100px;
-  transform: translateX(5%);
+  width: calc(var(--circle-size) * 0.55);
   align-self: center;
+  align-items: center;
 }
 
 .middleContent img{
@@ -130,12 +138,12 @@ header p{
 }
 
 .rightContent{
-  transform: translateX(50%);
+  text-align: left;
+  padding-left:30px;
 }
 
 .greeting{
-  position: relative;
-  transform: translateY(175%);
+  transform: translateY(200%);
   text-align: center;
 }
 
@@ -152,6 +160,14 @@ header p{
   text-align:left;
 }
 
+.circle-size-probe{
+  position: absolute;
+  visibility: hidden;
+  width: var(--circle-size);
+  height: 0;
+  pointer-events: none;
+}
+
 canvas {
   display: block;
 }
@@ -163,10 +179,6 @@ canvas {
 
   p{
     font-size: 1em;
-  }
-
-  .middleContent{
-    max-width: 80px;
   }
 
   button{
