@@ -10,6 +10,7 @@
 @font-face {
   font-family: Comfortaa;
   src: url(assets/Comfortaa.ttf);
+  font-display: swap;
 }
 
 @keyframes screenload{
@@ -20,7 +21,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: "Comfortaa", "Arial", san-serif;
+  font-family: "Comfortaa", "Arial", sans-serif;
   overflow:hidden;
   background-color:#190d1f;
 }
