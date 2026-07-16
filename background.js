@@ -1,9 +1,12 @@
+var canvas, ctx;
+var width, height;
+var frameCount = 0;
+
 var shapeConstructor = [{ red: 96, green: 8, blue: 216, multi: 1, frameC: 0}];
 
 //Variables that relate to the expansion of the background shapes.
 var expand, xFactor, yFactor;
 
-var frame;
 var multiply = 72;
 var scale;
 var responsive = 1;
@@ -13,11 +16,8 @@ var responsive = 1;
 var frameCounter = 1;
 
 //Variables for the colour of the background shapes. 
-var shapeRed = 0;
-var shapeGreen = 0; 
-var shapeBlue = 0;
+var shapeRed = 0, shapeGreen = 0, shapeBlue = 0;
 
-var startShapes = 0;
 var k = 0;
 
 var circleSize = 150; // fallback until CSS var is read
@@ -30,67 +30,38 @@ function updateCircleSize(){
   }
 }
 
-//Basic setup function with the frame rate and setting the screen size.
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  frameRate(60);
+function resizeCanvas(){
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
   updateCircleSize();
-  pixelDensity(1);
+}
+
+function createShape(f){
+  shapeConstructor.push({red:96, green:8, blue:216, frameC: f})
 }
 
 function draw() {
 
-  // Setting up background and location of everything, as it'll all be at center of the screen.
-  background(83,228,192);
-  noStroke();
-  translate(width/2, height/2)
+  frameCount++
 
-  xFactor = 1;
-
-  //These adjust the rate at which the Y co-ordinates of the shape move, depending on if
-  //The width is larger or height is larger.
-  if(width > height){
-    yFactor = 1 + height/width;
-  }
-
-  if(height > width){
-    yFactor = 1 + width/height;
-  }
+  ctx.setTransform(1,0,0,1,0,0)
+  ctx.fillStyle = 'rgb(83,228,192)';
+  ctx.fillRect(0,0,width, height)
+  ctx.translate(width/2, height/2);
 
   scale = width/720
-
-  if(scale <2){
-    scale = 2;
+  if(scale < 2){
+    scale = 2
   }
-
-  //This draws the first 10 shapes so that it looks like a continuous wave of color
-  if(k != 10){
-    //Because the website hasn't started fully yet, we use negetive values for the current frame
-    //We then mutiply the value by 9 minus the current value of k, creating a reverse starting frame
-    currentFrame = -(multiply*(9-k));
-    //Passing that current frame value into the function to create a shape
-    createShape(currentFrame);
-    
-    //The colours we are aiming for are R=83, G=228, B=192
-    //We do the same below, but this is in reverse.
-    shapeConstructor[k].red = 84.5 +(1.5*k+1);
-    shapeConstructor[k].green = 252.5 - (24.5*k+1);
-    shapeConstructor[k].blue = 194.5 + (2.5*k+1);
-    k++;
-  }
-
-  //Creates a new shape every 32 frames
+  
   if(frameCount == multiply * frameCounter){
     createShape(frameCount);
     frameCounter++;
   }
 
-  //Responsiveness stuff to match html + css
-  if(width <= 375){
-    responsive = 0.75;
-  }else{
-    responsive = 1;
-  }
+  responsive = width <= 375 ? 0.75 : 1;
 
   //The bulk of the work of the site is here.
   //This creates a shape that expands to fill the screen whilst progressively changing colour
@@ -101,7 +72,7 @@ function draw() {
     shapeBlue = shapeConstructor[i].blue;
 
     //Sets it as the fill of the shape
-    fill(shapeRed, shapeGreen, shapeBlue);
+    ctx.fillStyle= 'rgb('+shapeRed+','+ shapeGreen+','+shapeBlue+')';
 
     //As the difference between the purple and blue is fixed
     //and the ideal amount of shapes visible is around 10
@@ -115,36 +86,45 @@ function draw() {
     
     //Take the current frame count and subtract it from the frame the shape initially started
     //Multiplied by the scale of the screen.
-    expand = ((frameCount - shapeConstructor[i].frameC)*scale)*responsive;
+    var expand = ((frameCount - shapeConstructor[i].frameC)*scale)*responsive;
 
-    circle(0,0,circleSize+expand);
-
+    ctx.beginPath();
+    ctx.arc(0,0,(circleSize+expand)/2, 0, Math.PI *2)
+    ctx.fill();
   }
 
-  //This helps to optimise the site by removing the first item on the list,
-  //which isn't usually visible after a certain point.
   while(shapeConstructor.length > 20){
   shapeConstructor.shift();
+  }
+
+  ctx.fillStyle = '#e4f5fa';
+  ctx.beginPath();
+  ctx.arc(0,0, circleSize/2 , 0, Math.PI*2);
+  ctx.fill();
+
+  requestAnimationFrame(draw)
+
 }
 
-  push();
-    fill('#e4f5fa');
-    circle(0,0,circleSize);
+function seedInitialShapes(){
+  for(var k = 0; k < 10; k++){
+    var currentFrame = -(multiply * (9 - k));
+    createShape(currentFrame);
+    shapeConstructor[k].red = 84.5 + (1.5 * k + 1);
+    shapeConstructor[k].green = 252.5 - (24.5 * k + 1);
+    shapeConstructor[k].blue = 194.5 + (2.5 * k + 1);
+  }
 }
 
+function init(){
+  canvas = document.getElementById('bgCanvas');
+  ctx = canvas.getContext('2d');
+  resizeCanvas();
+  seedInitialShapes();
+  window.addEventListener('resize', resizeCanvas)
+  requestAnimationFrame(draw);
+
+}
+
+window.addEventListener('DOMContentLoaded', init)
 //Creates the shape with the first colour set and taking the current frame of the site.
-function createShape(f){
-  rCol = 96;
-  gCol = 8;
-  bCol = 216;
-
-  frame = f;
-
-  shapeConstructor.push({red:rCol, green:gCol, blue:bCol, frameC: frame});
-}
-
-//For when the window changes sizes.
-function windowResized(){
-  resizeCanvas(windowWidth, windowHeight);
-  updateCircleSize();
-}
