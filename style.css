@@ -26,11 +26,6 @@ html, body {
   background-color:#190d1f;
 }
 
-body{
-  animation-name: screenload;
-  animation-duration: 2s;
-}
-
 h1, p{
   color:#e4f5fa;
 }
@@ -69,6 +64,13 @@ header{
   position: fixed;
   width:100%;
   z-index: 1;
+  animation:screenload;
+  animation-duration: 1s;
+}
+
+main{
+  animation: screenload;
+  animation-duration: 2s;
 }
 
 .headerContent{
