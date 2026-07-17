@@ -19,13 +19,13 @@ If you've stumbled upon this, ***hello***,  I'm a Graphic Designer and Amateur p
 
 ## How It's Made
 
-**HTML, CSS, JavaScript with the p5js library**
+**HTML, CSS, JavaScript**
 
-When I created my new brand, I loved the look of the multiple colours expanding from the glasses, so I wanted to reflect that on this site. I mainly accomplished this with JavaScript using the **[p5js library](https://github.com/processing/p5.js)**. Through a lot of trial and error, I've managed to successfully reflect the expanding factor of my design, expanding beyond the regular.
+When I created my new brand, I loved the look of the multiple colours expanding from the glasses, so I wanted to reflect that on this site. I initially accomplished this using the **[p5js library](https://github.com/processing/p5.js)** but have since updated it to run without. Through a lot of trial and error, I've managed to successfully reflect the expanding factor of my design, expanding beyond the regular.
 
 ## What's next
 
-Looking to optimise the website by removing the need to use the p5js library. Although I am comfortable with the library, it's large size bulks up the site, so I am currently working on removing the need for the library.
+~~Looking to optimise the website by removing the need to use the p5js library. Although I am comfortable with the library, it's large size bulks up the site, so I am currently working on removing the need for the library.~~ COMPLETED
 
 I am planning on updating the header with links to some stuff I am working on. At the moment, I am currently working on a revision of my Terminal 10 project created in 2021 for a university course. Once completed, the header will be updated to include a link to the project.
 
