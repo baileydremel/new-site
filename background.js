@@ -8,8 +8,6 @@ var shapeConstructor = [{ red: 96, green: 8, blue: 216, multi: 1, frameC: 0}];
 var expand, xFactor, yFactor;
 
 var multiply = 72;
-var scale;
-var responsive = 1;
 
 //Counts the amount of times the marker frame to create a new shape has been met.
 //For this, its every 32 frames it creates a new 'shape'
@@ -19,6 +17,14 @@ var frameCounter = 1;
 var shapeRed = 0, shapeGreen = 0, shapeBlue = 0;
 
 var k = 0;
+
+var growthRate;
+
+function updateGrowthRate(){
+  var maxRadius = Math.sqrt(Math.pow(width/2, 2) + Math.pow(height/2, 2));
+  var lifespanFrames = 10 * multiply;
+  growthRate = (2* maxRadius - circleSize/2) / lifespanFrames;
+}
 
 var circleSize = 150; // fallback until CSS var is read
 
@@ -36,6 +42,7 @@ function resizeCanvas(){
   canvas.width = width;
   canvas.height = height;
   updateCircleSize();
+  updateGrowthRate();
 }
 
 function createShape(f){
@@ -50,18 +57,13 @@ function draw() {
   ctx.fillStyle = 'rgb(83,228,192)';
   ctx.fillRect(0,0,width, height)
   ctx.translate(width/2, height/2);
-
-  scale = width/720
-  if(scale < 2){
-    scale = 2
-  }
   
   if(frameCount == multiply * frameCounter){
     createShape(frameCount);
     frameCounter++;
   }
 
-  responsive = width <= 375 ? 0.75 : 1;
+  
 
   //The bulk of the work of the site is here.
   //This creates a shape that expands to fill the screen whilst progressively changing colour
@@ -86,15 +88,15 @@ function draw() {
     
     //Take the current frame count and subtract it from the frame the shape initially started
     //Multiplied by the scale of the screen.
-    var expand = ((frameCount - shapeConstructor[i].frameC)*scale)*responsive;
+    var expand = (frameCount - shapeConstructor[i].frameC) * growthRate;
 
     ctx.beginPath();
     ctx.arc(0,0,(circleSize+expand)/2, 0, Math.PI *2)
     ctx.fill();
   }
 
-  while(shapeConstructor.length > 20){
-  shapeConstructor.shift();
+  while(shapeConstructor.length > 12){
+    shapeConstructor.shift();
   }
 
   ctx.fillStyle = '#e4f5fa';
