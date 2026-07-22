@@ -20,6 +20,9 @@ var k = 0;
 
 var growthRate;
 
+var lastTimestamp = null;
+var targetFPS = 60;
+
 function updateGrowthRate(){
   var maxRadius = Math.sqrt(Math.pow(width/2, 2) + Math.pow(height/2, 2));
   var lifespanFrames = 10 * multiply;
@@ -49,16 +52,29 @@ function createShape(f){
   shapeConstructor.push({red:96, green:8, blue:216, frameC: f})
 }
 
-function draw() {
+function draw(timestamp) {
 
-  frameCount++
+  if (lastTimestamp == null){
+    lastTimestamp = timestamp;
+    requestAnimationFrame(draw);
+    return;
+  }
+  
+  var deltaMs = timestamp - lastTimestamp;
+  lastTimestamp = timestamp;
+  
+  var deltaFactor = (deltaMs / 1000) * targetFPS;
+
+  deltaFactor = Math.min(deltaFactor, 5);
+  
+  frameCount += deltaFactor;
 
   ctx.setTransform(1,0,0,1,0,0)
   ctx.fillStyle = 'rgb(83,228,192)';
   ctx.fillRect(0,0,width, height)
   ctx.translate(width/2, height/2);
   
-  if(frameCount == multiply * frameCounter){
+  if(frameCount >= multiply * frameCounter){
     createShape(frameCount);
     frameCounter++;
   }
@@ -82,9 +98,9 @@ function draw() {
     //Giving the illusion of shifting colours.
 
     //The colours we are aiming for are R=83, G=228, B=192
-    shapeConstructor[i].red = shapeRed-(1.5/multiply);
-    shapeConstructor[i].green = shapeGreen + (24.5/multiply);
-    shapeConstructor[i].blue = shapeBlue - (2.5/multiply);
+    shapeConstructor[i].red = shapeRed-(1.5/multiply) * deltaFactor;
+    shapeConstructor[i].green = shapeGreen + (24.5/multiply) * deltaFactor;
+    shapeConstructor[i].blue = shapeBlue - (2.5/multiply) * deltaFactor;
     
     //Take the current frame count and subtract it from the frame the shape initially started
     //Multiplied by the scale of the screen.
